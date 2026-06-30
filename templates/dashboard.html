@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Dashboard Banner -->
+
+<div class="dashboard-banner">
+
+    <img src="{{ url_for('static', filename='images/dashboard_banner.png') }}" alt="Banner">
+
+</div>
+
+
+<div class="dashboard-header">
+
+    <h1>Welcome To Rushika Is Live</h1>
+
+    <p>India's Fastest Growing Gaming Community</p>
+
+</div>
+
+
+<div class="media-section">
+
+    <!-- Left Card -->
+
+    <div class="card stream-card">
+
+        <h3>Official YouTube Channel</h3>
+
+        <img src="{{ url_for('static', filename='images/youtube_banner.png') }}"
+             class="youtube-image">
+
+        <p>
+        
+        Subscribe our Official YouTube Channel for
+        
+        BGMI Videos
+        
+        Live Gameplay
+        
+        Community Updates
+        
+        </p>
+
+        <div class="card-actions">
+
+            <a href="https://youtube.com/@rushikaislive?si=WdhhWS2lvj1UIoXP"
+               target="_blank"
+               class="subscribe-btn">
+
+               Subscribe Now
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Right Images -->
+
+    <div class="gallery-section">
+
+        <div class="card image-card">
+
+            <img src="{{ url_for('static', filename='images/gallery1.jpg') }}">
+
+            <h4>Gaming Highlights</h4>
+
+        </div>
+    
+
+        <div class="card image-card">
+
+            <img src="{{ url_for('static', filename='images/gallery2.jpg') }}">
+
+            <h4>Community Events</h4>
+
+        </div>
+
+
+
+        {% if session.get("role")=="admin" %}
+
+<h2>Registered Users</h2>
+
+<table border="1">
+
+<tr>
+
+<th>ID</th>
+
+<th>Name</th>
+
+<th>Username</th>
+
+<th>Phone</th>
+
+<th>Address</th>
+
+<th>Registered</th>
+
+</tr>
+
+{% for user in users %}
+
+<tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.name }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.phone }}</td>
+    <td>{{ user.address }}</td>
+    <td>{{ user.created_at.strftime('%d-%m-%Y') }}</td>
+    <td>
+        <a href="{{ url_for('delete', id=user.id) }}" class="btn-delete">
+            Delete
+        </a>
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}

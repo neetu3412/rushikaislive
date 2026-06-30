@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="admin-dashboard">
+    <h2>Admin Control Panel</h2>
+    <div class="stats-card">
+        <h3>Total Users: {{ users|length }} / 5</h3>
+    </div>
+    
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.address }}</td>
+                <td>
+                    <a href="{{ url_for('delete_user', id=user.id) }}" class="btn-delete">Delete User
+                        Delete User
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

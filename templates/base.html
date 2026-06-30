@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rushika Is Live</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo-img">
+
+            <h2>Rushika Is Live</h2>
+
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('home') }}">🏠 Dashboard</a>
+
+            {% if 'user_id' in session %}
+
+                <a href="#">👤 {{ session['username'] }}</a>
+
+                {% if session['role']=="admin" %}
+                <a href="{{ url_for('admin_panel') }}" class="admin-btn">
+                    Admin Panel
+                </a>
+                {% endif %}
+
+                <a href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+                <a href="{{ url_for('register') }}" class="register-btn">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+        {% for category,message in messages %}
+
+        <div class="alert {{category}}">
+            {{message}}
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</div>
+
+</body>
+</html>
