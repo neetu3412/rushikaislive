@@ -1,3 +1,5 @@
 Flask
+Flask-SQLAlchemy
+SQLAlchemy
 gunicorn
 Werkzeug==3.0.1
