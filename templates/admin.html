@@ -1,10 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="admin-dashboard">
-    <h2>Admin Control Panel</h2>
+    
     <div class="stats-card">
         <h3>Total Users: {{ users|length }} / 5</h3>
     </div>
+
+
+
+    <h3>Gaming Highlights Video</h3>
+    
+    <form method="POST" action="{{ url_for('save_video') }}">
+    
+        <input
+            type="text"
+            name="youtube_link"
+            placeholder="Paste YouTube Video or Shorts Link"
+            style="width:100%;padding:12px;border-radius:8px;margin-bottom:10px;">
+    
+        <button type="submit" class="register-btn">
+            Save Video
+        </button>
+    
+    </form>
+    
+    <br>
+
+
     
     <table class="user-table">
         <thead>
@@ -26,7 +48,7 @@
                 <td>{{ user.phone }}</td>
                 <td>{{ user.address }}</td>
                 <td>
-                    <a href="{{ url_for('delete_user', id=user.id) }}" class="btn-delete">Delete User
+                    <a href="{{ url_for('delete', id=user.id) }}" class="btn-delete">
                         Delete User
                     </a>
                 </td>

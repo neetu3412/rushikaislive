@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
+import re
 
 app = Flask(__name__)
 
@@ -31,6 +32,11 @@ class User(db.Model):
     role = db.Column(db.String(20), default="user")
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    youtube_link = db.Column(db.String(500))
 
 
 # ---------------- CREATE DATABASE ---------------- #
@@ -79,9 +85,23 @@ def home():
     if session.get("role")=="admin":
         users=User.query.filter_by(role="user").all()
 
+    setting = Settings.query.first()
+    
+    youtube_video = ""
+    
+    print("SETTING:", setting)
+    
+    if setting:
+        print("LINK:", setting.youtube_link)
+        youtube_video = get_embed_url(setting.youtube_link)
+        print("EMBED:", youtube_video)
+    else:
+        print("NO SETTINGS FOUND")
+    
     return render_template(
         "dashboard.html",
-        users=users
+        users=users,
+        youtube_video=youtube_video
     )
 
 
@@ -178,6 +198,23 @@ def logout():
     return redirect(url_for("home"))
 
 
+
+
+def get_embed_url(url):
+
+    if "watch?v=" in url:
+        video_id = url.split("watch?v=")[1].split("&")[0]
+
+    elif "shorts/" in url:
+        video_id = url.split("shorts/")[1].split("?")[0]
+
+    else:
+        return ""
+
+    return f"https://www.youtube.com/embed/{video_id}?autoplay=1&mute=1&loop=1&playlist={video_id}"
+
+
+
 # ---------------- ADMIN ---------------- #
 
 @app.route("/admin")
@@ -197,6 +234,29 @@ def admin_panel():
         print(u.id, u.name, u.username, u.role)
 
     return render_template("admin.html", users=users)
+
+
+@app.route("/save_video", methods=["POST"])
+def save_video():
+
+    if session.get("role") != "admin":
+        return redirect(url_for("home"))
+
+    link = request.form["youtube_link"]
+
+    setting = Settings.query.first()
+
+    if not setting:
+        setting = Settings(youtube_link=link)
+        db.session.add(setting)
+    else:
+        setting.youtube_link = link
+
+    db.session.commit()
+
+    flash("Video Updated Successfully", "success")
+
+    return redirect(url_for("admin_panel"))
 
 
 # ---------------- DELETE USER ---------------- #

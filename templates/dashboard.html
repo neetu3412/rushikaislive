@@ -60,25 +60,43 @@
 
     <!-- Right Images -->
 
+<!-- Right Side -->
+
     <div class="gallery-section">
-
+    
+        <!-- Gaming Highlights -->
+    
         <div class="card image-card">
-
-            <img src="{{ url_for('static', filename='images/gallery1.jpg') }}">
-
+    
+            {% if youtube_video %}
+    
+            <div class="shorts-container">
+                <iframe
+                    src="{{ youtube_video }}"
+                    title="Gaming Highlights"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                </iframe>
+            </div>
+    
+            {% endif %}
+    
             <h4>Gaming Highlights</h4>
-
+    
         </div>
     
-
+        <!-- Community Events -->
+    
         <div class="card image-card">
-
+    
             <img src="{{ url_for('static', filename='images/gallery2.jpg') }}">
-
+    
             <h4>Community Events</h4>
-
+    
         </div>
-
+    
+    </div>
 
 
         {% if session.get("role")=="admin" %}
